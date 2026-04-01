@@ -54,8 +54,8 @@ const TheVoid = () => {
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: 'top top',
-          end: isMob ? '+=300%' : '+=600%',
-          scrub: 1,
+          end: isMob ? '+=450%' : '+=600%',
+          scrub: isMob ? 2 : 1, // Ultra smooth scrub on mobile
           pin: true,
           fastScrollEnd: true,
           anticipatePin: 1
@@ -155,9 +155,9 @@ const TheVoid = () => {
         tl.to(wrapperRef.current, {
           opacity: 0,
           pointerEvents: 'none',
-          duration: 0.4,
-          ease: 'power1.out'
-        }, 2.4);
+          duration: 1.0,
+          ease: 'power2.inOut' // Slower, smoother fade out matching the scrub perfectly
+        }, 2.6);
 
         const clubReg = document.querySelector('.clubreg-page');
         if (clubReg) {
@@ -166,9 +166,9 @@ const TheVoid = () => {
              { 
                opacity: 1, 
                visibility: 'visible',
-               duration: 0.6, 
-               ease: 'power2.out' 
-             }, 2.5);
+               duration: 1.2, 
+               ease: 'power2.inOut' 
+             }, 2.6); // Synchronized start with the huge zoom impact
         }
       } else {
         // DESKTOP ONLY: Dome Gallery / Void logic
