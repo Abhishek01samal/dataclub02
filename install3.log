@@ -1,0 +1,15 @@
+npm warn cleanup Failed to remove some directories [
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\D:\\dataclub-main\\node_modules',
+npm warn cleanup     [Error: EPERM: operation not permitted, rmdir 'D:\dataclub-main\node_modules\@parcel\watcher\src'] {
+npm warn cleanup       errno: -4048,
+npm warn cleanup       code: 'EPERM',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'D:\\dataclub-main\\node_modules\\@parcel\\watcher\\src'
+npm warn cleanup     }
+npm warn cleanup   ]
+npm warn cleanup ]
+npm error process terminated
+npm error signal SIGINT
+npm error A complete log of this run can be found in: C:\Users\sanug\AppData\Local\npm-cache\_logs\2026-03-29T17_52_03_950Z-debug-0.log
+Terminate batch job (Y/N)? 
