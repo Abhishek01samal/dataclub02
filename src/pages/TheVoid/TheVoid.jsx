@@ -54,7 +54,7 @@ const TheVoid = () => {
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: 'top top',
-          end: isMob ? '+=200%' : '+=600%',
+          end: isMob ? '+=300%' : '+=600%',
           scrub: 1,
           pin: true,
           fastScrollEnd: true,
@@ -62,31 +62,102 @@ const TheVoid = () => {
         }
       });
 
-      // On mobile, we use textRef for the high-velocity zoom-in
-      const targetRef = isMob ? textRef.current : imageRef.current;
+      // Target the image container for the initial scale down
+      const targetRef = imageRef.current;
+
+      // START FOLDER LOGIC (Global for both now)
+      tl.fromTo(targetRef, 
+        { scale: 1, rotateY: 0, yPercent: 0, opacity: 1, borderRadius: '0px', boxShadow: 'none' },
+        {
+          scale: 0.5,
+          ease: 'power1.inOut',
+          duration: 0.4,
+          force3D: true
+        }, 0);
+
+      tl.to(imageRef.current, {
+        scale: 0.08,
+        rotateY: 360,
+        yPercent: -40,
+        borderRadius: '12px',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+        ease: 'power1.inOut',
+        duration: 0.4,
+        immediateRender: false,
+        force3D: true
+      }, 0.4);
+
+      tl.to({}, {
+        duration: 0.05,
+        onStart: () => {
+          setFolderVisible(true);
+          setIsOpen(true);
+          setMiddlePageUp(true);
+        },
+        onReverseComplete: () => {
+          setFolderVisible(false);
+          setIsOpen(false);
+          setPaper3Exiting(false);
+          setMiddlePageUp(false);
+        },
+      }, 0.6);
+
+      tl.to(targetRef, {
+        scale: 0.05,
+        yPercent: 0,
+        ease: 'power2.in',
+        duration: 0.3,
+        force3D: true
+      }, 0.8);
+
+      tl.to({}, {
+        duration: 0.1,
+        onStart: () => {
+          if (imageRef.current) imageRef.current.style.opacity = '0';
+          setPaper3Exiting(true);
+        },
+        onReverseComplete: () => {
+          if (imageRef.current) imageRef.current.style.opacity = '1';
+          setPaper3Exiting(false);
+        }
+      }, 1.1);
+
+      tl.to(".folder-back-wrapper .paper:nth-child(2)", {
+        yPercent: -130,
+        scale: 1.2,
+        rotateY: 180,
+        ease: "power2.out",
+        duration: 0.4
+      }, 1.15);
+
+      tl.to(".folder-back-wrapper .paper:nth-child(2)", {
+        xPercent: -50,
+        yPercent: -150,
+        scale: 4,
+        rotateZ: 45,
+        rotateX: 60,
+        rotateY: "+=0",
+        ease: "power2.inOut",
+        duration: 0.6
+      }, 1.2);
+
+      // THE BIG ZOOM
+      tl.to(".folder-back-wrapper .paper:nth-child(2)", {
+        scale: 200,
+        rotateZ: 0,
+        yPercent: -50,
+        ease: "power3.in",
+        duration: 0.8
+      }, 2.2);
 
       if (isMob) {
-        // MOBILE: Hyper-speed Center Zoom In Effect
-        // Explicitly target the visual center of the viewport with a slight upward nudge
-        tl.fromTo(targetRef, 
-          { scale: 1, x: 0, y: 0, opacity: 1, transformOrigin: 'center center' },
-          {
-            scale: 25,
-            opacity: 0,
-            x: 0,
-            y: 0,
-            ease: 'power3.inOut',
-            duration: 1.5,
-            force3D: true
-          }, 0);
-
-        // Transition to registration much earlier and faster
+        // MOBILE ONLY: Go straight to ClubReg after the zoom
         tl.to(wrapperRef.current, {
           opacity: 0,
           pointerEvents: 'none',
           duration: 0.4,
           ease: 'power1.out'
-        }, 1.0);
+        }, 2.4);
 
         const clubReg = document.querySelector('.clubreg-page');
         if (clubReg) {
@@ -97,101 +168,10 @@ const TheVoid = () => {
                visibility: 'visible',
                duration: 0.6, 
                ease: 'power2.out' 
-             }, 1.1);
+             }, 2.5);
         }
       } else {
-        // DESKTOP: Original Folder Logic
-        tl.fromTo(targetRef, 
-          { scale: 1, rotateY: 0, yPercent: 0, opacity: 1, borderRadius: '0px', boxShadow: 'none' },
-          {
-            scale: 0.5,
-            ease: 'power1.inOut',
-            duration: 0.4,
-            force3D: true
-          }, 0);
-
-        tl.to(imageRef.current, {
-          scale: 0.08,
-          rotateY: 360,
-          yPercent: -40,
-          borderRadius: '12px',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-          ease: 'power1.inOut',
-          duration: 0.4,
-          immediateRender: false,
-          force3D: true
-        }, 0.4);
-
-        tl.to({}, {
-          duration: 0.05,
-          onStart: () => {
-            setFolderVisible(true);
-            setIsOpen(true);
-            setMiddlePageUp(true);
-          },
-          onReverseComplete: () => {
-            setFolderVisible(false);
-            setIsOpen(false);
-            setPaper3Exiting(false);
-            setMiddlePageUp(false);
-          },
-        }, 0.6);
-
-        tl.to(targetRef, {
-          scale: 0.05,
-          yPercent: 0,
-          ease: 'power2.in',
-          duration: 0.3,
-          force3D: true
-        }, 0.8);
-
-        tl.to({}, {
-          duration: 0.1,
-          onStart: () => {
-            if (imageRef.current) imageRef.current.style.opacity = '0';
-            setPaper3Exiting(true);
-          },
-          onReverseComplete: () => {
-            if (imageRef.current) imageRef.current.style.opacity = '1';
-            setPaper3Exiting(false);
-          }
-        }, 1.1);
-
-        tl.to(".folder-back-wrapper .paper:nth-child(2)", {
-          yPercent: -130,
-          scale: 1.2,
-          rotateY: 180,
-          ease: "power2.out",
-          duration: 0.4
-        }, 1.15);
-
-        tl.to(".folder-back-wrapper .paper:nth-child(2)", {
-          xPercent: -50,
-          yPercent: -150,
-          scale: 4,
-          rotateZ: 45,
-          rotateX: 60,
-          rotateY: "+=0",
-          ease: "power2.inOut",
-          duration: 0.6
-        }, 1.2);
-
-        tl.to(".folder-back-wrapper .paper:nth-child(2)", {
-          scale: 200,
-          rotateZ: 0,
-          yPercent: -50,
-          ease: "power3.in",
-          duration: 0.8
-        }, 2.2);
-
-        if (whitePageRef.current) {
-          tl.to(whitePageRef.current, {
-            yPercent: -100,
-            ease: "power3.inOut",
-            duration: 1.0
-          }, 3.2);
-        }
-
+        // DESKTOP ONLY: Dome Gallery / Void logic
         if (galleryRef.current) {
           tl.to({}, {
             duration: 0.1,
@@ -215,6 +195,12 @@ const TheVoid = () => {
         }
 
         if (whitePageRef.current) {
+          tl.to(whitePageRef.current, {
+            yPercent: -100,
+            ease: "power3.inOut",
+            duration: 1.0
+          }, 3.2);
+
           tl.to(whitePageRef.current, {
             scale: 8.0,
             opacity: 0,
@@ -256,16 +242,14 @@ const TheVoid = () => {
       onTouchStart={onInteract}
       style={{ height: '100dvh', overflow: 'clip' }}
     >
-      {!isMobile && (
-        <FolderWrapper 
-          isVisible={folderVisible} 
-          isOpen={isOpen} 
-          paper3Exiting={paper3Exiting}
-          middlePageUp={middlePageUp}
-          color="#5227FF"
-          paperColor="#ffffff"
-        />
-      )}
+      <FolderWrapper 
+        isVisible={folderVisible} 
+        isOpen={isOpen} 
+        paper3Exiting={paper3Exiting}
+        middlePageUp={middlePageUp}
+        color="#5227FF"
+        paperColor="#ffffff"
+      />
       <div className="image-container" style={{ position: 'relative', zIndex: 15 }}>
         <div 
           ref={imageRef}
