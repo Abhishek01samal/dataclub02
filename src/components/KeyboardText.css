@@ -1,0 +1,65 @@
+.keyboard-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  text-align: center;
+}
+
+.keyboard-word {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.key {
+  font-size: 15vw;
+  display: inline-block;
+  letter-spacing: -1vw;
+  transition: transform 0.2s;
+  color: #fff;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pressDown1 {
+  30%, 40%, 100% { transform: translateY(0); }
+  35% { transform: translateY(10px); }
+}
+
+@keyframes pressDown2 {
+  70%, 80%, 100% { transform: translateY(0); }
+  75% { transform: translateY(10px); }
+}
+
+@keyframes pressDown3 {
+  30%, 40%, 100% { transform: translateY(0); }
+  35% { transform: translateY(10px); }
+}
+
+@keyframes pressDown4 {
+  40%, 50%, 100% { transform: translateY(0); }
+  45% { transform: translateY(10px); }
+}
+
+@keyframes pressDown5 {
+  20%, 30%, 100% { transform: translateY(0); }
+  25% { transform: translateY(10px); }
+}
+
+@keyframes pressDown6 {
+  60%, 70%, 100% { transform: translateY(0); }
+  65% { transform: translateY(10px); }
+}
+
+@keyframes pressDown7 {
+  10%, 20%, 100% { transform: translateY(0); }
+  15% { transform: translateY(10px); }
+}
+
+@keyframes pressDown8 {
+  35%, 45%, 100% { transform: translateY(0); }
+  40% { transform: translateY(10px); }
+}

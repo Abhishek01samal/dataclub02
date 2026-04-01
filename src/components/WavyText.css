@@ -1,0 +1,48 @@
+.wavy-container {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  font-family: "Archivo Black", sans-serif;
+  gap: 1rem;
+}
+
+.wavy-word {
+  color: #000; /* Match the black background */
+  font-size: 0;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.wavy-word span {
+  font-size: 5rem;
+  display: inline-block;
+  animation: move 3s ease-in-out infinite;
+  /* Recessed/Sinked effect using multiple shadows */
+  text-shadow: 
+    1px 1px 1px rgba(255, 255, 255, 0.1), /* Highlight on bottom right */
+    -1px -1px 1px rgba(0, 0, 0, 0.5);      /* Shadow on top left */
+}
+
+@keyframes move {
+  0% {
+    transform: translate(-30%, 0);
+    text-shadow: 
+      1px 1px 1px rgba(255, 255, 255, 0.05),
+      -1px -1px 1px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    /* More pronounced depth at the peak of the wave */
+    text-shadow: 
+      2px 2px 4px rgba(255, 255, 255, 0.15),
+      -2px -2px 4px rgba(0, 0, 0, 0.8);
+    transform: translate(0, -10px);
+  }
+  100% {
+    transform: translate(30%, 0);
+    text-shadow: 
+      1px 1px 1px rgba(255, 255, 255, 0.05),
+      -1px -1px 1px rgba(0, 0, 0, 0.5);
+  }
+}

@@ -1,0 +1,105 @@
+.cta-mobile {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Full-screen white circle */
+.cta-mobile__circle {
+  position: absolute;
+  width: 110vmax;
+  height: 110vmax;
+  border-radius: 50%;
+  background: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Dot grid pattern inside circle */
+  background-image:
+    radial-gradient(circle, #ccc 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-color: #fff;
+}
+
+/* Text wrapper centered in circle */
+.cta-mobile__text {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+  line-height: 1;
+  text-align: center;
+  color: #000;
+  font-family: 'Arial Black', 'Arial Bold', Arial, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.cta-mobile__data {
+  font-size: 15vw;
+}
+
+.cta-mobile__science {
+  font-size: 9.5vw;
+}
+
+.mob-line-reveal-1, .mob-line-reveal-2 {
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+.s__cta__char__slice {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+.s__cta__line, .s__cta__stars, .a-dots {
+  scale: 1 !important;
+  transition: none !important;
+}
+
+/* Staggered Bounce (applied to full letters) */
+@keyframes mob-char-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.mob-bounce-char {
+  display: inline-block !important;
+  will-change: transform;
+}
+
+
+
+/* Static star sparkles */
+.cta-mobile__star {
+  position: absolute;
+  fill: #000;
+  z-index: 3;
+  pointer-events: none;
+}
+.cta-mobile__star:nth-child(1) { top: 14%; left: 22%; width: 22px; }
+.cta-mobile__star:nth-child(2) { top: 34%; right: 14%; width: 16px; }
+.cta-mobile__star:nth-child(3) { bottom: 22%; left: 14%; width: 16px; }
+.cta-mobile__star:nth-child(4) { bottom: 16%; right: 22%; width: 22px; }
+
+/* Outer ring border on circle */
+.cta-mobile__circle::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #000;
+}

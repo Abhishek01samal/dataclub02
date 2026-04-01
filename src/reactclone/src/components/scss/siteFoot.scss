@@ -1,0 +1,29 @@
+
+  .site-foot {
+    @include flex(row, center, center);
+
+    position: relative;
+    z-index: 3;
+
+    padding: 1.5rem;
+
+    border-top: 1px solid color(secondary);
+
+    @include mq(phone) {
+      padding: 1rem;
+    }
+
+    &__logo {
+      svg {
+        display: block;
+        width: 3rem;
+        height: 3rem;
+
+        @include mq(phone) {
+          width: 1.875rem;
+          height: 1.875rem;
+        }
+      }
+    }
+  }
+

@@ -1,0 +1,236 @@
+.hyperspeed-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.hyperspeed-page .hyperspeed-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.hyperspeed-page .hyperspeed-bg.visible {
+  opacity: 1;
+}
+
+.hyperspeed-page .hyperspeed-bg.faded {
+  opacity: 0.2;
+}
+
+.hyperspeed-page .hyperspeed-bg canvas {
+  pointer-events: auto;
+}
+
+.hyperspeed-page .content {
+  position: relative;
+  z-index: 100;
+}
+
+.hyperspeed-page .hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px 80px;
+  z-index: 100;
+}
+
+@media (min-width: 768px) {
+  .hyperspeed-page .hero {
+    padding: 0 40px 80px;
+  }
+}
+
+.hyperspeed-page .hero-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, hsl(0 0% 2.4% / 0.5), transparent);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hyperspeed-page .hero-content {
+  position: relative;
+  z-index: 100;
+}
+
+.hyperspeed-page .hero-title {
+  font-size: clamp(56px, 9vw, 120px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hyperspeed-page .hero-title span {
+  display: block;
+}
+
+.hyperspeed-page .hero-outline {
+  -webkit-text-stroke: 2px hsl(0 0% 94%);
+  color: transparent;
+}
+
+.hyperspeed-page .hero-subtitle {
+  font-size: clamp(14px, 2vw, 18px);
+  color: hsl(0 0% 60%);
+  max-width: 500px;
+  margin-bottom: 40px;
+}
+
+.hyperspeed-page .hero-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.hyperspeed-page .btn-primary,
+.hyperspeed-page .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.hyperspeed-page .btn-primary {
+  background: hsl(0 0% 94%);
+  color: hsl(0 0% 2.4%);
+}
+
+.hyperspeed-page .btn-primary:hover {
+  background: hsl(0 0% 100%);
+  transform: translateY(-2px);
+}
+
+.hyperspeed-page .btn-ghost {
+  background: transparent;
+  color: hsl(0 0% 94%);
+  border: 1px solid hsl(0 0% 30%);
+}
+
+.hyperspeed-page .btn-ghost:hover {
+  border-color: hsl(0 0% 94%);
+  background: hsl(0 0% 94% / 0.1);
+}
+
+.hyperspeed-page .hero-stats {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.hyperspeed-page .stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.hyperspeed-page .stat-num {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.hyperspeed-page .stat-label {
+  font-size: 12px;
+  color: hsl(0 0% 50%);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hyperspeed-page .section-label {
+  font-size: 12px;
+  color: hsl(0 0% 50%);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+}
+
+.hyperspeed-page .section-title {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  margin-bottom: 48px;
+}
+
+.hyperspeed-page .content-wrapper {
+  position: relative;
+}
+
+.hyperspeed-page .content-bg {
+  position: absolute;
+  inset: 0;
+  background: hsl(0 0% 2.4% / 0.85);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+.hyperspeed-page .content-inner {
+  position: relative;
+}
+
+.hyperspeed-page .section {
+  padding: 64px 20px;
+}
+
+@media (min-width: 768px) {
+  .hyperspeed-page .section {
+    padding: 96px 40px;
+  }
+}
+
+.hyperspeed-page .ticker-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  background: hsl(0 0% 5%);
+  padding: 12px 0;
+  z-index: 50;
+}
+
+.hyperspeed-page .ticker-track {
+  display: flex;
+  width: fit-content;
+}
+
+.hyperspeed-page .ticker-group {
+  display: flex;
+  align-items: center;
+  animation: ticker 20s linear infinite;
+}
+
+.hyperspeed-page .ticker-item {
+  white-space: nowrap;
+  padding: 0 24px;
+  font-size: 12px;
+  color: hsl(0 0% 60%);
+}
+
+.hyperspeed-page .ticker-diamond {
+  margin-left: 24px;
+  color: hsl(120 71% 58%);
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.mono {
+  font-family: 'Space Grotesk', monospace;
+}
