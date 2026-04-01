@@ -9,7 +9,10 @@ gsap.registerPlugin(ScrollTrigger);
 function ClubRegPage() {
   const [introMode, setIntroMode] = useState('playing'); // 'playing', 'fading', 'ended'
   const [tunnelDepth, setTunnelDepth] = useState('infinite');
+<<<<<<< HEAD
   const [isHyperspeedVisible, setIsHyperspeedVisible] = useState(false);
+=======
+>>>>>>> 3f74d5f5ef66db43085a4cc5131f61d12be9fcfa
   const pageWrapperRef = useRef(null);
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
@@ -20,7 +23,10 @@ function ClubRegPage() {
     const introTimer = setTimeout(() => {
       setIntroMode('fading');
       setTunnelDepth('normal');
+<<<<<<< HEAD
       setIsHyperspeedVisible(true);
+=======
+>>>>>>> 3f74d5f5ef66db43085a4cc5131f61d12be9fcfa
       
       // 2. Transition duration for the reveal
       const fadeDuration = isMobile ? 800 : 1500;
@@ -88,7 +94,11 @@ function ClubRegPage() {
   return (
     <div className={`clubreg-page ${introMode}`}>
       {/* Background - Always active */}
+<<<<<<< HEAD
       <div className={`hyperspeed-bg ${(isMobile && isHyperspeedVisible) ? 'fade-in' : (isMobile ? 'hidden-bg' : '')}`}>
+=======
+      <div className="hyperspeed-bg">
+>>>>>>> 3f74d5f5ef66db43085a4cc5131f61d12be9fcfa
         <Hyperspeed effectOptions={effectOptions} />
       </div>
 
