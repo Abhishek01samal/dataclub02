@@ -84,7 +84,6 @@
 
 /* Ensure background is visible from the start */
 .hyperspeed-bg {
-<<<<<<< HEAD
   z-index: -1;
   transition: opacity 1.5s ease-out;
 }
@@ -95,11 +94,6 @@
 
 .hyperspeed-bg.fade-in {
   opacity: 1 !important;
-=======
-  opacity: 1 !important;
-  visibility: visible !important;
-  z-index: -1;
->>>>>>> 3f74d5f5ef66db43085a4cc5131f61d12be9fcfa
 }
 
 /* Hero reveal specifics */

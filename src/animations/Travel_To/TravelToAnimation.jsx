@@ -9,9 +9,9 @@ const TravelToAnimation = ({ isActive, onComplete, children }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const TIMING = {
-    zoom: 300,
-    expand: 150,
-    total: 450
+    zoom: 800,
+    expand: 400,
+    total: 1200
   };
 
   useEffect(() => {
