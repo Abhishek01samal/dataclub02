@@ -1,0 +1,36 @@
+.stretch-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.stretch-row {
+  font-size: clamp(80px, 18vw, 200px);
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  width: min(90vw, 800px);
+  color: #fff;
+  font-family: 'Anton', 'Space Grotesk', sans-serif;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 50;
+}
+
+.stretch-row:first-child {
+  gap: 10px;
+  font-size: clamp(140px, 35vw, 400px);
+}
+
+.stretch-row:last-child {
+  gap: 30px;
+  font-size: clamp(80px, 18vw, 200px);
+}
+
+.stretch-row span {
+  display: inline-block;
+  will-change: transform;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+}

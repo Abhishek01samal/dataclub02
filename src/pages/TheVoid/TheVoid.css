@@ -1,0 +1,78 @@
+.void-container {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: transparent;
+  color: #fff;
+  position: relative;
+  overflow: visible;
+  z-index: 10;
+  will-change: transform;
+}
+
+.s-cta--intro {
+  padding: 0 !important;
+}
+
+.s-cta--intro .s__button {
+  display: none !important;
+}
+
+.image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.white-page {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 50;
+  will-change: transform;
+}
+
+.white-page-content {
+  max-width: 800px;
+  padding: 40px 20px;
+  text-align: left;
+}
+
+.white-page-title {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: clamp(32px, 8vw, 64px);
+  font-weight: 900;
+  color: #000000;
+  margin: 0 0 40px 0;
+  letter-spacing: -0.02em;
+}
+
+.white-page-text {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: clamp(14px, 2.5vw, 18px);
+  line-height: 1.8;
+  color: #333333;
+  margin: 0 0 24px 0;
+}
+
+.white-page-text:last-child {
+  margin-bottom: 0;
+}
+
+.lime-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: hsl(120, 60%, 8%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+}

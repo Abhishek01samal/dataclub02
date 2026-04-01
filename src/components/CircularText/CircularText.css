@@ -1,0 +1,41 @@
+.circular-text {
+  margin: 0 auto;
+  border-radius: 50%;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  font-weight: bold;
+  color: #000;
+  font-weight: 900;
+  text-align: center;
+  cursor: pointer;
+  transform-origin: 50% 50%;
+  -webkit-transform-origin: 50% 50%;
+  z-index: 5;
+  pointer-events: none;
+  /* Signal GPU compositing */
+  will-change: transform;
+}
+
+.circular-text span {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  /* Avoid all per-character transitions as they trigger layout/repaint costs */
+}
+
+@keyframes dg-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+

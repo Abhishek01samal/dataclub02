@@ -1,0 +1,12 @@
+.blank-wrapper {
+  width: 100%;
+  overflow: hidden;
+  opacity: 1;
+  position: relative;
+}
+
+.blank-wrapper > *:not(.void-container) {
+  position: relative;
+  z-index: 100;
+  background: black; /* Ensure clear transition from void */
+}

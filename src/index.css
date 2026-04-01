@@ -1,0 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;600;700;900&display=swap');
+
+:root {
+  font-family: 'Space Grotesk', 'Inter', system-ui, 'Segoe UI', sans-serif;
+  line-height: 1.4;
+  font-weight: 400;
+  color: #f7f7f7;
+  background-color: #000;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* buttery iOS scroll */
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Remove tap flash on mobile */
+}
+
+*::selection {
+  background: rgba(249, 148, 23, 0.3);
+  color: #fff;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  background: #000;
+  color: #fff;
+  font-family: 'Space Grotesk', 'Inter', system-ui, 'Segoe UI', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.page-shell {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: clip; /* allows ScrollTrigger but prevents horizontal junk */
+}
+
+.hero-shell {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  /* Limit layout/paint scope to this subtree */
+  contain: layout style;
+}
+
+.hero-shell--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.circular-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.circular-text span {
+  display: inline-block;
+  pointer-events: none;
+  font-family: 'Anton', 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  will-change: transform;
+}
+
+.ring-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-letters {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* Signal GPU compositing for the CSS rotation animation */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.ring-letter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 0 0;
+  color: #fff;
+  text-transform: uppercase;
+  white-space: pre;
+  font-family: 'Anton', 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Prevent individual letters from causing layout recalcs */
+  contain: layout;
+}
+
+.intro-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #000;
+  z-index: 400;
+  pointer-events: auto;
+  transition: opacity 0.8s ease;
+}
+
+.intro-overlay--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-shape {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: width 3s ease, height 3s ease;
+  box-shadow: 0 0 120px rgba(255,255,255,0.3);
+  overflow: visible;
+}
+
+.intro-shape--circle {
+  border-radius: 50%;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.55);
+}
+
+.intro-shape--circle:hover {
+  transform: translate(-50%, -50%) scale(1.03);
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.65);
+}
+
+.enter-circle-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+.enter-circle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff 0%, #f9f9f9 45%, #ececec 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-family: 'Anton', 'Space Grotesk', sans-serif;
+  letter-spacing: 0.3em;
+  color: #050505;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.enter-circle--bounce {
+  animation: circleBounce 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes circleBounce {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  85% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.enter-circle:hover {
+  box-shadow: 0 35px 100px rgba(255, 255, 255, 0.3);
+  transition: box-shadow 0.05s ease;
+}
+
+.intro-shape::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.55), transparent 60%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  opacity: 0.7;
+  border-radius: inherit;
+}
+
+.intro-circle__value {
+  font-size: 200px;
+  font-family: 'Anton', 'Space Grotesk', sans-serif;
+  letter-spacing: 0.1em;
+  color: #050505;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.intro-circle__percent {
+  font-size: 0.75rem;
+  letter-spacing: 0.45em;
+  color: #050505;
+  margin-top: 0.3rem;
+  display: block;
+  position: absolute;
+  bottom: 30%;
+}
+
+.intro-overlay::after {
+  content: '';
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 65%);
+  top: 8%;
+  left: 18%;
+  opacity: 0.45;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+
+@keyframes introCirclePop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rot {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mrot {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+/* ═══ INTRO / RING RESPONSIVE ═══ */
+@media (max-width: 600px) {
+  .enter-circle {
+    width: 200px;
+    height: 200px;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+  }
+
+  .intro-circle__value {
+    font-size: 120px;
+  }
+}
+
+@media (max-width: 400px) {
+  .enter-circle {
+    width: 160px;
+    height: 160px;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+  }
+
+  .intro-circle__value {
+    font-size: 80px;
+  }
+}
+
+/* ─── Mobile: clip hero overflow so rings don't cause horizontal scroll ─── */
+@media (max-width: 768px) {
+  .page-shell {
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .hero-shell {
+    /* Scale down the entire ring cluster on small screens */
+    transform: translate(-50%, -50%) !important;
+  }
+
+  /* EnterButton on mobile */
+  [style*="width: 260px"] {
+    width: 160px !important;
+    height: 160px !important;
+    font-size: 18px !important;
+  }
+}
+
+/* ─── Honour "Reduce Motion" OS setting ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ring-letters {
+    animation: none !important;
+  }
+}
+

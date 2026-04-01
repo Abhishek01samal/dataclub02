@@ -1,0 +1,89 @@
+.svg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.text-svg-draw {
+  width: 100%;
+  max-width: 2400px;
+  overflow: visible;
+}
+
+.svg-drawn-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 210px;
+  word-spacing: 0.4em;
+  fill: transparent;
+  stroke: #fff;
+  stroke-width: 3.5px;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: drawLine 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards, fillText 1s 2s forwards;
+  will-change: stroke-dashoffset, fill;
+}
+
+.text-svg-draw:hover .svg-drawn-text {
+  stroke: #F99417;
+  transition: stroke 0.3s ease;
+}
+
+@keyframes drawLine {
+  0% { stroke-dashoffset: 1200; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes fillText {
+  0% {
+    fill: transparent;
+    filter: drop-shadow(0 0 0px transparent);
+  }
+  100% {
+    fill: #fff;
+    filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+  }
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1200px) {
+  .svg-drawn-text {
+    font-size: 160px;
+    word-spacing: 0.3em;
+  }
+}
+
+@media (max-width: 900px) {
+  .svg-drawn-text {
+    font-size: 120px;
+    word-spacing: 0.25em;
+    stroke-width: 2.5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .svg-drawn-text {
+    font-size: 72px;
+    word-spacing: 0.15em;
+    stroke-width: 2px;
+    stroke-dasharray: 800;
+    stroke-dashoffset: 800;
+  }
+
+  @keyframes drawLine {
+    0% { stroke-dashoffset: 800; }
+    100% { stroke-dashoffset: 0; }
+  }
+}
+
+@media (max-width: 400px) {
+  .svg-drawn-text {
+    font-size: 52px;
+    word-spacing: 0.1em;
+    stroke-width: 1.5px;
+  }
+}

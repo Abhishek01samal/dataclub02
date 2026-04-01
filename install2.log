@@ -1,0 +1,7 @@
+npm error code EBUSY
+npm error syscall rename
+npm error path D:\dataclub-main\node_modules\sass-embedded-win32-x64\dart-sass\src
+npm error dest D:\dataclub-main\node_modules\.sass-embedded-win32-x64-NbEIOClo\dart-sass\src
+npm error errno -4082
+npm error EBUSY: resource busy or locked, rename 'D:\dataclub-main\node_modules\sass-embedded-win32-x64\dart-sass\src' -> 'D:\dataclub-main\node_modules\.sass-embedded-win32-x64-NbEIOClo\dart-sass\src'
+npm error A complete log of this run can be found in: C:\Users\sanug\AppData\Local\npm-cache\_logs\2026-03-29T17_51_32_043Z-debug-0.log
