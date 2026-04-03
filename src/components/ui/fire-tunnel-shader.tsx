@@ -23,8 +23,14 @@ uniform vec2 u_mouse;
 uniform sampler2D u_tex0;
 uniform sampler2D u_tex1;
 uniform sampler2D u_tex2;
+uniform sampler2D u_tex3;
+uniform sampler2D u_tex4;
+uniform sampler2D u_tex5;
+uniform sampler2D u_tex6;
+uniform sampler2D u_tex7;
 uniform int u_hasTextures;
 uniform int u_isMobile;
+uniform int u_textureCount;
 
 vec2 rotate(vec2 v, float a) {
   float s = sin(a);
@@ -107,6 +113,18 @@ vec2 rayMarch(vec3 ro, vec3 rd) {
   return vec2(distO, distS);
 }
 
+// Helper function to sample the correct texture
+vec3 getTunnelTexture(int idx, vec2 uv) {
+    if (idx == 0) return texture2D(u_tex0, uv).rgb;
+    if (idx == 1) return texture2D(u_tex1, uv).rgb;
+    if (idx == 2) return texture2D(u_tex2, uv).rgb;
+    if (idx == 3) return texture2D(u_tex3, uv).rgb;
+    if (idx == 4) return texture2D(u_tex4, uv).rgb;
+    if (idx == 5) return texture2D(u_tex5, uv).rgb;
+    if (idx == 6) return texture2D(u_tex6, uv).rgb;
+    return texture2D(u_tex7, uv).rgb;
+}
+
 void main() {
   vec2 uv = (gl_FragCoord.xy * 2.0 - u_resolution.xy)
            / u_resolution.y;
@@ -167,6 +185,7 @@ void main() {
       float valid = 0.0;
       
       float zFrequency = 1.25;
+      float zIdx = floor(abs(p.z) * zFrequency);
       float zLocal = fract(abs(p.z) * zFrequency);
       
       // Calculate continuous scale with noise EXACTLY like mapScene
@@ -174,34 +193,47 @@ void main() {
       float boxW = 0.6 * currentRadius;
       float boxH = 0.4 * currentRadius;
       
-      if (zLocal > 0.0 && zLocal < 1.0) { // full coverage
+      if (zLocal > 0.0 && zLocal < 1.0) {
+        vec2 rawUV = vec2(0.0);
+        float isPanel = 0.0;
+        
         if (abs(n.x) > abs(n.y)) {
           float ySpan = boxH * 2.0;
           float yNorm = (pLocal.y + boxH) / ySpan;
           if (yNorm > 0.0 && yNorm < 1.0) {
-            panelUV = vec2(n.x > 0.0 ? zLocal : 1.0 - zLocal, yNorm);
-            valid = 1.0;
+            // Rotated 180 degrees (flipped X and Y)
+            rawUV = vec2(n.x > 0.0 ? zLocal : 1.0 - zLocal, 1.0 - yNorm);
+            isPanel = 1.0;
           }
         } else {
           float xSpan = boxW * 2.0;
           float xNorm = (pLocal.x + boxW) / xSpan;
           if (xNorm > 0.0 && xNorm < 1.0) {
-            panelUV = vec2(zLocal, xNorm);
-            valid = 1.0;
+            // Fix orientation on floor and ceiling (x is horizontal, z is depth)
+            rawUV = vec2(xNorm, n.y > 0.0 ? 1.0 - zLocal : zLocal);
+            isPanel = 1.0;
           }
         }
         
-        // Add a little wiggle effect to the images inside the panels
-        panelUV.x += sin(u_time * 2.0 + p.z * 1.5) * 0.03;
-        panelUV.y += cos(u_time * 1.8 + p.z * 1.2) * 0.03;
+        if (isPanel > 0.5) {
+          rawUV.x += sin(u_time * 2.0 + p.z * 1.5) * 0.03;
+          rawUV.y += cos(u_time * 1.8 + p.z * 1.2) * 0.03;
+          
+          // Scale UV map to control picture size
+          // Scale of 1.15 makes them fill most of the tile (larger)
+          float scale = 1.15;
+          vec2 scaledUV = (rawUV - 0.5) * scale + 0.5;
+          if (scaledUV.x >= 0.0 && scaledUV.x <= 1.0 && scaledUV.y >= 0.0 && scaledUV.y <= 1.0) {
+            panelUV = scaledUV;
+            valid = 1.0;
+          }
+        }
       }
       
       if (valid > 0.5) {
-        vec3 tColor = vec3(0.0);
-        if (n.x > 0.5) tColor = texture2D(u_tex0, panelUV).rgb;
-        else if (n.x < -0.5) tColor = texture2D(u_tex1, panelUV).rgb;
-        else tColor = texture2D(u_tex2, panelUV).rgb;
-        col = tColor; // 100% opaque overlay
+        // Pick texture based on depth segment and side normal for variety
+        int texIdx = int(mod(zIdx + (n.x > 0.5 ? 0.0 : (n.x < -0.5 ? 1.0 : 2.0)), float(u_textureCount)));
+        col = getTunnelTexture(texIdx, panelUV);
       }
     }
   }
@@ -216,6 +248,16 @@ void main() {
 }
 `;
 
+// Helper function to shuffle array
+const shuffle = (array: string[]) => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
 interface FireTunnelShaderProps {
   scrollProgress?: number;
   scrollProgressRef?: React.RefObject<number>;
@@ -225,18 +267,25 @@ interface FireTunnelShaderProps {
 const FireTunnelShader: FC<FireTunnelShaderProps> = ({ 
   scrollProgress = 0,
   scrollProgressRef,
-  images = ['/p1.jpg', '/p2.jpg', '/p3.jpg']
+  images = []
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [error, setError] = useState<string | null>(null);
   const frameId = useRef<number>();
 
   const currentScrollRef = useRef(0);
-  // Support both ref-based (zero re-renders) and prop-based usage
   const targetScrollRef = useRef(scrollProgress);
   if (!scrollProgressRef) {
     targetScrollRef.current = scrollProgress;
   }
+
+  // Pick 8 random images from the pool on mount to provide variety
+  const initialImages = useRef<string[]>([]);
+  useEffect(() => {
+    if (images.length > 0) {
+      initialImages.current = shuffle(images).slice(0, 8);
+    }
+  }, [images]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -250,17 +299,14 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
       return;
     }
 
-    function compileShader(
-      type: GLenum,
-      src: string
-    ): WebGLShader | null {
+    // Shader compilation logic ...
+    function compileShader(type: GLenum, src: string): WebGLShader | null {
       const sh = gl.createShader(type)!;
       gl.shaderSource(sh, src);
       gl.compileShader(sh);
       if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
         console.error(gl.getShaderInfoLog(sh));
         gl.deleteShader(sh);
-        setError("Shader compile error (see console)");
         return null;
       }
       return sh;
@@ -268,15 +314,17 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
 
     const vs = compileShader(gl.VERTEX_SHADER, vsSource);
     const fs = compileShader(gl.FRAGMENT_SHADER, fsSource);
-    if (!vs || !fs) return;
+    if (!vs || !fs) {
+        setError("Shader compile error");
+        return;
+    }
 
     const program = gl.createProgram()!;
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error(gl.getProgramInfoLog(program));
-      setError("Program link error (see console)");
+      setError("Program link error");
       return;
     }
 
@@ -285,19 +333,18 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
     const scrollLoc = gl.getUniformLocation(program, "u_scroll")!;
     const timeLoc = gl.getUniformLocation(program, "u_time");
     const mouseLoc = gl.getUniformLocation(program, "u_mouse")!;
-    const texLocs = [
-        gl.getUniformLocation(program, "u_tex0"),
-        gl.getUniformLocation(program, "u_tex1"),
-        gl.getUniformLocation(program, "u_tex2"),
-    ];
+    const texLocs = Array.from({ length: 8 }, (_, i) => gl.getUniformLocation(program, `u_tex${i}`));
     const hasTexLoc = gl.getUniformLocation(program, "u_hasTextures");
     const mobileLoc = gl.getUniformLocation(program, "u_isMobile");
+    const countLoc = gl.getUniformLocation(program, "u_textureCount");
 
-    const textures: (WebGLTexture | null)[] = [null, null, null];
+    const textures: (WebGLTexture | null)[] = new Array(8).fill(null);
     let loadedCount = 0;
 
-    images.forEach((src, idx) => {
-        if (idx > 2) return;
+    const currentImages = initialImages.current.length > 0 ? initialImages.current : images.slice(0, 8);
+
+    currentImages.forEach((src, idx) => {
+        if (idx >= 8) return;
         const img = new Image();
         img.crossOrigin = "anonymous";
         img.onload = () => {
@@ -322,7 +369,6 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
     gl.bufferData(gl.ARRAY_BUFFER, quad, gl.STATIC_DRAW);
 
     const resize = () => {
-      // Cap DPR at 1.5 — beyond that GPUs struggle for no visible gain
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width  = canvas.clientWidth  * dpr;
       canvas.height = canvas.clientHeight * dpr;
@@ -337,10 +383,7 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
 
-      // Read from the ref if provided — avoids all React re-renders
-      const targetScroll = scrollProgressRef
-        ? (scrollProgressRef.current ?? 0)
-        : targetScrollRef.current;
+      const targetScroll = scrollProgressRef ? (scrollProgressRef.current ?? 0) : targetScrollRef.current;
       currentScrollRef.current += (targetScroll - currentScrollRef.current) * 0.05;
 
       gl.enableVertexAttribArray(posLoc);
@@ -348,7 +391,6 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
       gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
 
       const currentTime = performance.now() * 0.001;
-
       gl.uniform2f(resLoc, canvas.width, canvas.height);
       gl.uniform1f(scrollLoc, currentScrollRef.current);
       if (timeLoc) gl.uniform1f(timeLoc, currentTime);
@@ -357,10 +399,11 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
       const isMobile = window.innerWidth < 768 ? 1 : 0;
       if (mobileLoc) gl.uniform1i(mobileLoc, isMobile);
 
-      const targetLoads = Math.min(images.length, 3);
+      const targetLoads = Math.min(currentImages.length, 8);
       if (loadedCount === targetLoads && targetLoads > 0) {
           if (hasTexLoc) gl.uniform1i(hasTexLoc, 1);
-          for (let i = 0; i < 3; i++) {
+          if (countLoc) gl.uniform1i(countLoc, targetLoads);
+          for (let i = 0; i < 8; i++) {
               if (textures[i] && texLocs[i]) {
                   gl.activeTexture(gl.TEXTURE0 + i);
                   gl.bindTexture(gl.TEXTURE_2D, textures[i]);
@@ -380,7 +423,7 @@ const FireTunnelShader: FC<FireTunnelShaderProps> = ({
       cancelAnimationFrame(frameId.current!);
       ro.disconnect();
     };
-  }, []);
+  }, [images]); // Re-init if images array changes significantly
 
   return (
     <div className="relative overflow-hidden" style={{ width: '100%', height: '100%' }}>

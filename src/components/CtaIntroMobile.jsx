@@ -26,7 +26,7 @@ const CtaIntroMobile = ({ textRef }) => {
             </div>
           </div>
 
-          <div className="s__cta js-cta" style={{ '--size': '110vmax' }}>
+          <div className="s__cta js-cta" style={{ '--size': '97vmin' }}>
             <div className="s__cta__stars" />
             <div className="a-dots" />
 
