@@ -62,119 +62,129 @@ const TheVoid = () => {
 
       const targetRef = imageRef.current;
 
-      // 1. Initial Scale Down
-      tl.fromTo(targetRef, 
-        { scale: 1, rotateY: 0, yPercent: 0, opacity: 1, borderRadius: '0px', boxShadow: 'none' },
-        {
-          scale: 0.5,
+      if (!isMob) {
+        // 1. Initial Scale Down
+        tl.fromTo(targetRef, 
+          { scale: 1, rotateY: 0, yPercent: 0, opacity: 1, borderRadius: '0px', boxShadow: 'none' },
+          {
+            scale: 0.5,
+            ease: 'power1.inOut',
+            duration: 0.4,
+            force3D: true
+          }, 0);
+
+        // 2. Folder Spin-up
+        tl.to(imageRef.current, {
+          scale: 0.08,
+          rotateY: 360,
+          yPercent: -40,
+          borderRadius: '12px',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
           ease: 'power1.inOut',
           duration: 0.4,
+          immediateRender: false,
           force3D: true
-        }, 0);
+        }, 0.4);
 
-      // 2. Folder Spin-up
-      tl.to(imageRef.current, {
-        scale: 0.08,
-        rotateY: 360,
-        yPercent: -40,
-        borderRadius: '12px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-        ease: 'power1.inOut',
-        duration: 0.4,
-        immediateRender: false,
-        force3D: true
-      }, 0.4);
+        // 3. Open Folder
+        tl.to({}, {
+          duration: 0.05,
+          onStart: () => {
+            setFolderVisible(true);
+            setIsOpen(true);
+            setMiddlePageUp(true);
+          },
+          onReverseComplete: () => {
+            setFolderVisible(false);
+            setIsOpen(false);
+            setPaper3Exiting(false);
+            setMiddlePageUp(false);
+          },
+        }, 0.6);
 
-      // 3. Open Folder
-      tl.to({}, {
-        duration: 0.05,
-        onStart: () => {
-          setFolderVisible(true);
-          setIsOpen(true);
-          setMiddlePageUp(true);
-        },
-        onReverseComplete: () => {
-          setFolderVisible(false);
-          setIsOpen(false);
-          setPaper3Exiting(false);
-          setMiddlePageUp(false);
-        },
-      }, 0.6);
+        // 4. Shrink Original Image
+        tl.to(targetRef, {
+          scale: 0.05,
+          yPercent: 0,
+          ease: 'power2.in',
+          duration: 0.3,
+          force3D: true
+        }, 0.8);
 
-      // 4. Shrink Original Image
-      tl.to(targetRef, {
-        scale: 0.05,
-        yPercent: 0,
-        ease: 'power2.in',
-        duration: 0.3,
-        force3D: true
-      }, 0.8);
+        // 5. Reveal Content Paper
+        tl.to({}, {
+          duration: 0.1,
+          onStart: () => {
+            if (imageRef.current) imageRef.current.style.opacity = '0';
+            setPaper3Exiting(true);
+          },
+          onReverseComplete: () => {
+            if (imageRef.current) imageRef.current.style.opacity = '1';
+            setPaper3Exiting(false);
+          }
+        }, 1.1);
 
-      // 5. Reveal Content Paper
-      tl.to({}, {
-        duration: 0.1,
-        onStart: () => {
-          if (imageRef.current) imageRef.current.style.opacity = '0';
-          setPaper3Exiting(true);
-        },
-        onReverseComplete: () => {
-          if (imageRef.current) imageRef.current.style.opacity = '1';
-          setPaper3Exiting(false);
-        }
-      }, 1.1);
+        // 6. Extraction of the card
+        tl.to(".folder-back-wrapper .paper:nth-child(2)", {
+          yPercent: -130,
+          scale: 1.2,
+          rotateY: 180,
+          ease: "power2.out",
+          duration: 0.4
+        }, 1.15);
 
-      // 6. Extraction of the card
-      tl.to(".folder-back-wrapper .paper:nth-child(2)", {
-        yPercent: -130,
-        scale: 1.2,
-        rotateY: 180,
-        ease: "power2.out",
-        duration: 0.4
-      }, 1.15);
+        tl.to(".folder-back-wrapper .paper:nth-child(2)", {
+          xPercent: -50,
+          yPercent: -150,
+          scale: 4,
+          rotateZ: 45,
+          rotateX: 60,
+          rotateY: "+=0",
+          ease: "power2.inOut",
+          duration: 0.6
+        }, 1.2);
 
-      tl.to(".folder-back-wrapper .paper:nth-child(2)", {
-        xPercent: -50,
-        yPercent: -150,
-        scale: 4,
-        rotateZ: 45,
-        rotateX: 60,
-        rotateY: "+=0",
-        ease: "power2.inOut",
-        duration: 0.6
-      }, 1.2);
+        // 7. CARD COVERS THE WHOLE PAGE
+        tl.to(".folder-back-wrapper .paper:nth-child(2)", {
+          scale: 250, // Massive scale to cover everything
+          rotateZ: 0,
+          rotateX: 0,
+          yPercent: -50,
+          xPercent: 0,
+          ease: "power2.in",
+          duration: 0.8,
+          force3D: true
+        }, 2.2);
 
-      // 7. CARD COVERS THE WHOLE PAGE
-      tl.to(".folder-back-wrapper .paper:nth-child(2)", {
-        scale: 250, // Massive scale to cover everything
-        rotateZ: 0,
-        rotateX: 0,
-        yPercent: -50,
-        xPercent: 0,
-        ease: "power2.in",
-        duration: 0.8,
-        force3D: true
-      }, 2.2);
-
-      // 8. CARD FADES OUT
-      tl.to(".folder-back-wrapper .paper:nth-child(2)", {
-        opacity: 0,
-        duration: 0.4,
-        ease: "power1.out"
-      }, 3.0);
+        // 8. CARD FADES OUT
+        tl.to(".folder-back-wrapper .paper:nth-child(2)", {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power1.out"
+        }, 3.0);
+      }
 
       if (isMob) {
+        // On mobile, skip the folder animation entirely and perform a direct fade out transition
+        tl.to(targetRef, {
+          scale: 0.8,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.inOut'
+        }, 0);
+
         tl.to(wrapperRef.current, {
           opacity: 0,
           pointerEvents: 'none',
-          duration: 1.0,
+          duration: 0.8,
           ease: 'power2.inOut'
-        }, 3.4);
+        }, 0.4);
 
         const clubReg = document.querySelector('.clubreg-page');
         if (clubReg) {
            tl.fromTo(clubReg, 
              { opacity: 0, visibility: 'hidden' },
-             { opacity: 1, visibility: 'visible', duration: 1.2, ease: 'power2.inOut' }, 3.4);
+             { opacity: 1, visibility: 'visible', duration: 1.2, ease: 'power2.inOut' }, 0.4);
         }
       } else {
         // 9. REVEAL VOID TUNNEL (AFTER FADE)
@@ -227,14 +237,16 @@ const TheVoid = () => {
       onTouchStart={onInteract}
       style={{ height: '100dvh', overflow: 'clip' }}
     >
-      <FolderWrapper 
-        isVisible={folderVisible} 
-        isOpen={isOpen} 
-        paper3Exiting={paper3Exiting}
-        middlePageUp={middlePageUp}
-        color="#5227FF"
-        paperColor="#ffffff"
-      />
+      {!isMobile && (
+        <FolderWrapper 
+          isVisible={folderVisible} 
+          isOpen={isOpen} 
+          paper3Exiting={paper3Exiting}
+          middlePageUp={middlePageUp}
+          color="#5227FF"
+          paperColor="#ffffff"
+        />
+      )}
       <div className="image-container" style={{ position: 'relative', zIndex: 15 }}>
         <div 
           ref={imageRef}
