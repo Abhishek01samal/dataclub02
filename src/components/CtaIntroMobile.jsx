@@ -69,9 +69,6 @@ const CtaIntroMobile = ({ textRef }) => {
 
 
           <div className="s__cta js-cta" style={{ '--size': '105vmin' }}>
-            <div className="s__cta__stars" />
-            <div className="a-dots" />
-
             <div 
               ref={textRef} 
               className="cta-text-animator" 
@@ -83,11 +80,13 @@ const CtaIntroMobile = ({ textRef }) => {
                 alignItems: 'center', 
                 justifyContent: 'center',
                 willChange: 'transform',
-                position: 'relative'
+                position: 'relative',
+                background: 'radial-gradient(circle, #ccc 1px, transparent 1px) center / 28px 28px repeat', // Hardware accelerated grid
+                borderRadius: '50%'
               }}
             >
               {/* Logo Loop perfectly orbiting inside the circle */}
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, color: '#000', pointerEvents: 'none' }}>
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, color: '#000', pointerEvents: 'none', willChange: 'transform' }}>
                 <CircularText 
                   text={techLogos.map(logo => logo.node)} 
                   spinDuration={25} 
