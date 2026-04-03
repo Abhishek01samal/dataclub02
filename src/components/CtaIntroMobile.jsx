@@ -2,6 +2,47 @@ import React, { useRef } from 'react';
 import Shuffle from './Shuffle';
 import '@clone/components/scss/sCta.scss';
 import './CtaIntroMobile.css';
+import CircularText from './CircularText/CircularText';
+
+import LogoLoop from './LogoLoop';
+import { 
+  SiReact, 
+  SiTypescript, 
+  SiTailwindcss,
+  SiPython,
+  SiGithub,
+  SiVite,
+  SiPostgresql,
+  SiMongodb,
+  SiGraphql,
+  SiFigma,
+  SiTensorflow,
+  SiScikitlearn,
+  SiPandas,
+  SiNvidia,
+  SiKeras,
+  SiKaggle,
+  SiJupyter
+} from 'react-icons/si';
+
+const techLogos = [
+  { node: <SiReact />, title: "React", href: "https://react.dev" },
+  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiPython />, title: "Python", href: "https://www.python.org" },
+  { node: <SiGithub />, title: "GitHub", href: "https://github.com" },
+  { node: <SiVite />, title: "Vite", href: "https://vitejs.dev" },
+  { node: <SiPostgresql />, title: "PostgreSQL", href: "https://www.postgresql.org" },
+  { node: <SiMongodb />, title: "MongoDB", href: "https://www.mongodb.com" },
+  { node: <SiGraphql />, title: "GraphQL", href: "https://graphql.org" },
+  { node: <SiFigma />, title: "Figma", href: "https://www.figma.com" },
+  { node: <SiTensorflow />, title: "TensorFlow", href: "https://www.tensorflow.org" },
+  { node: <SiScikitlearn />, title: "Scikit-Learn", href: "https://scikit-learn.org" },
+  { node: <SiPandas />, title: "Pandas", href: "https://pandas.pydata.org" },
+  { node: <SiNvidia />, title: "NVIDIA", href: "https://www.nvidia.com" },
+  { node: <SiKeras />, title: "Keras", href: "https://keras.io" },
+  { node: <SiJupyter />, title: "Jupyter", href: "https://jupyter.org" }
+];
 
 const CtaIntroMobile = ({ textRef }) => {
   const ctaRef = useRef(null);
@@ -26,7 +67,8 @@ const CtaIntroMobile = ({ textRef }) => {
             </div>
           </div>
 
-          <div className="s__cta js-cta" style={{ '--size': '97vmin' }}>
+
+          <div className="s__cta js-cta" style={{ '--size': '105vmin' }}>
             <div className="s__cta__stars" />
             <div className="a-dots" />
 
@@ -40,41 +82,31 @@ const CtaIntroMobile = ({ textRef }) => {
                 flexDirection: 'column', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                willChange: 'transform'
+                willChange: 'transform',
+                position: 'relative'
               }}
             >
-              <Shuffle
-                text="DATA"
-                shuffleDirection="right"
-                duration={0.6}
-                animationMode="evenodd"
-                shuffleTimes={1}
-                ease="power3.out"
-                stagger={0.05}
-                threshold={0.1}
-                triggerOnce={true}
-                triggerOnHover
-                respectReducedMotion={true}
-                loop={true}
-                loopDelay={1}
-                style={{ fontSize: '11rem', color: '#000', fontFamily: 'Anton, sans-serif' }}
-              />
-              <Shuffle
-                text="SCIENCE"
-                shuffleDirection="right"
-                duration={0.6}
-                animationMode="evenodd"
-                shuffleTimes={1}
-                ease="power3.out"
-                stagger={0.05}
-                threshold={0.1}
-                triggerOnce={true}
-                triggerOnHover
-                respectReducedMotion={true}
-                loop={true}
-                loopDelay={1}
-                style={{ fontSize: '7.5rem', color: '#000', fontFamily: 'Anton, sans-serif', marginTop: '-0.1em' }}
-              />
+              {/* Logo Loop perfectly orbiting inside the circle */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, color: '#000', pointerEvents: 'none' }}>
+                <CircularText 
+                  text={techLogos.map(logo => logo.node)} 
+                  spinDuration={25} 
+                  className="mobile-ring-text"
+                  radius="44vmin"
+                  itemStyle={{ fontSize: '3rem', margin: '0 1rem' }}
+                  isStarPattern={true}
+                />
+              </div>
+
+              {/* Static DATA SCIENCE text */}
+              <div style={{ zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: '11rem', color: '#000', fontFamily: 'Anton, sans-serif', lineHeight: 1 }}>
+                  DATA
+                </div>
+                <div style={{ fontSize: '7.5rem', color: '#000', fontFamily: 'Anton, sans-serif', marginTop: '-0.1em', lineHeight: 1 }}>
+                  SCIENCE
+                </div>
+              </div>
             </div>
             
             <div className="s__cta__link"></div>

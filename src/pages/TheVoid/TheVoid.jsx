@@ -52,8 +52,8 @@ const TheVoid = () => {
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: 'top top',
-          end: isMob ? '+=450%' : '+=600%',
-          scrub: isMob ? 2 : 1,
+          end: isMob ? '+=150%' : '+=600%',
+          scrub: isMob ? 0.5 : 1,
           pin: true,
           fastScrollEnd: true,
           anticipatePin: 1

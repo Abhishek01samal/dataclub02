@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import './CircularText.css';
 
-const CircularText = ({ text, spinDuration = 20, onHover = 'speedUp', className = '' }) => {
-  const letters = Array.from(text);
+const CircularText = ({ text, spinDuration = 20, onHover = 'speedUp', className = '', radius = 110, itemStyle = {}, isStarPattern = false }) => {
+  const letters = Array.isArray(text) ? text : Array.from(text);
   const containerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -21,11 +21,14 @@ const CircularText = ({ text, spinDuration = 20, onHover = 'speedUp', className 
     >
       {letters.map((letter, i) => {
         const rotationDeg = (360 / letters.length) * i;
-        const radius = 110; 
-        const transform = `rotateZ(${rotationDeg}deg) translateY(-${radius}px)`;
+        const baseRadius = typeof radius === 'string' ? radius : radius + 'px';
+        const currentRadius = isStarPattern && (i % 2 !== 0) 
+          ? `calc(${baseRadius} - 12vmin)` 
+          : baseRadius;
+        const transform = `rotateZ(${rotationDeg}deg) translateY(calc(-1 * ${currentRadius}))`;
 
         return (
-          <span key={i} style={{ transform, WebkitTransform: transform }}>
+          <span key={i} style={{ ...itemStyle, transform, WebkitTransform: transform, display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
             {letter}
           </span>
         );
