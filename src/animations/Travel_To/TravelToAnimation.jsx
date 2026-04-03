@@ -8,7 +8,13 @@ const TravelToAnimation = ({ isActive, onComplete, children }) => {
   const startTimeRef = useRef(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const TIMING = {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  const TIMING = isMobile ? {
+    zoom: 400,
+    expand: 200,
+    total: 600
+  } : {
     zoom: 800,
     expand: 400,
     total: 1200

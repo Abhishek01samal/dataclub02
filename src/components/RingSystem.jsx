@@ -32,24 +32,30 @@ const RING_CONFIGS = [
   },
 ];
 
-const CENTER_RADIUS = 150;
-const RING_GAP = 100;
-
-// Pre-compute ring layout once at module level \u2014 never changes at runtime
-const RINGS = (() => {
-  const rings = [];
-  let currentRadius = CENTER_RADIUS + RING_GAP;
-  RING_CONFIGS.slice().reverse().forEach((config) => {
-    rings.unshift({ ...config, radius: currentRadius });
-    currentRadius += parseInt(config.fontSize) + config.gap;
-  });
-  return rings;
-})();
-
 const RingSystem = memo(({ isVisible, onEnterClick }) => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  const rings = useMemo(() => {
+    const centerRadius = isMobile ? 180 : 150;
+    const ringGap = isMobile ? 120 : 100;
+    const currentRings = [];
+    let radius = centerRadius + ringGap;
+
+    RING_CONFIGS.slice().reverse().forEach((config) => {
+      const fontSize = isMobile ? 65 : parseInt(config.fontSize);
+      currentRings.unshift({ 
+        ...config, 
+        radius, 
+        fontSize: `${fontSize}px` 
+      });
+      radius += fontSize + (isMobile ? 80 : config.gap);
+    });
+    return currentRings;
+  }, [isMobile]);
+
   return (
     <div className={`hero-shell ${isVisible ? 'hero-shell--visible' : ''}`}>
-      {RINGS.map((ring, index) => (
+      {rings.map((ring, index) => (
         <CircularText
           key={index}
           text={ring.text}

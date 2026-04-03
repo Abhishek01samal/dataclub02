@@ -9,14 +9,13 @@ import '../clubreg/styles.css';
 gsap.registerPlugin(ScrollTrigger);
 
 function ClubRegPage() {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const [introMode, setIntroMode] = useState('playing'); 
-  const [tunnelDepth, setTunnelDepth] = useState('infinite');
-  const [isHyperspeedVisible, setIsHyperspeedVisible] = useState(false);
+  const [tunnelDepth, setTunnelDepth] = useState(isMobile ? 'normal' : 'infinite');
+  const [isHyperspeedVisible, setIsHyperspeedVisible] = useState(isMobile);
   const [showAllMembers, setShowAllMembers] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const pageWrapperRef = useRef(null);
-
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   const members = [
     {
@@ -203,7 +202,7 @@ function ClubRegPage() {
   ];
 
   useEffect(() => {
-    const introDuration = isMobile ? 2000 : 8000;
+    const introDuration = isMobile ? 300 : 8000;
     const introTimer = setTimeout(() => {
       setIntroMode('fading');
       setTunnelDepth('normal');

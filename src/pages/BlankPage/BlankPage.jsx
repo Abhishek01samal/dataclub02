@@ -7,10 +7,12 @@ import ClubRegPage from '../clubreg/ClubRegPage';
 const ReactCloneApp = lazy(() => import('../../components/ReactCloneApp'));
 
 const BlankPage = () => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <div className="blank-wrapper">
       <Suspense fallback={null}>
-        <TheVoid />
+        {!isMobile && <TheVoid />}
         <ClubRegPage />
         <ReactCloneApp />
       </Suspense>

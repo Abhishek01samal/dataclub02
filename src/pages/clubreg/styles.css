@@ -32,6 +32,13 @@
   visibility: hidden;
 }
 
+@media (max-width: 767px) {
+  .clubreg-page {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .clubreg-page .hero,
 .clubreg-page .content-wrapper,
 .clubreg-page .section,
