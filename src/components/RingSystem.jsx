@@ -41,7 +41,10 @@ const RingSystem = memo(({ isVisible, onEnterClick }) => {
     const currentRings = [];
     let radius = centerRadius + ringGap;
 
-    RING_CONFIGS.slice().reverse().forEach((config) => {
+    // Mobile optimization: Use only 2 rings to reduce load
+    const configsToUse = isMobile ? RING_CONFIGS.slice(0, 2) : RING_CONFIGS;
+
+    configsToUse.slice().reverse().forEach((config) => {
       const fontSize = isMobile ? 65 : parseInt(config.fontSize);
       currentRings.unshift({ 
         ...config, 

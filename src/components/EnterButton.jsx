@@ -40,7 +40,8 @@ const EnterButton = ({ onClick }) => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%'
+            width: '100%',
+            willChange: 'transform'
           }}>
             <Shuffle
               text="DATA"
@@ -54,7 +55,7 @@ const EnterButton = ({ onClick }) => {
               triggerOnce={false}
               triggerOnHover={false}
               loop={true}
-              loopDelay={1.5}
+              loopDelay={3.0}
               style={{ fontSize: '110px', fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 0.7, pointerEvents: 'none', marginTop: '-25px' }}
             />
             <Shuffle
@@ -69,7 +70,7 @@ const EnterButton = ({ onClick }) => {
               triggerOnce={false}
               triggerOnHover={false}
               loop={true}
-              loopDelay={1.5}
+              loopDelay={3.0}
               style={{ fontSize: '85px', fontWeight: 900, letterSpacing: '0.01em', marginTop: '-115px', lineHeight: 0.2, pointerEvents: 'none' }}
             />
           </div>
